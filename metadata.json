@@ -1,0 +1,6 @@
+{
+  "name": "AwazUthao",
+  "description": "Aapki Awaaz, Aapka Shehar - Citizen engagement and community issue platform",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile in the application",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "points": { "type": "number" },
+        "level": { "type": "string" },
+        "badges": { "type": "array" },
+        "issuesReported": { "type": "number" },
+        "issuesVerified": { "type": "number" },
+        "isAdmin": { "type": "boolean" },
+        "joinedAt": { "type": "string" }
+      },
+      "required": ["uid", "name", "points", "level", "badges", "issuesReported", "issuesVerified", "isAdmin"]
+    },
+    "Issue": {
+      "title": "Issue",
+      "description": "A civic issue reported by a citizen",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "severity": { "type": "string" },
+        "status": { "type": "string" },
+        "location": { "type": "object" },
+        "ward": { "type": "string" },
+        "upvotes": { "type": "number" },
+        "upvotedBy": { "type": "array" },
+        "verifiedBy": { "type": "array" },
+        "reportedBy": { "type": "string" },
+        "reporterName": { "type": "string" },
+        "reporterPhoto": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "department": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "description", "category", "severity", "status", "location", "ward", "upvotes", "upvotedBy", "verifiedBy", "reportedBy", "reporterName", "department"]
+    },
+    "Session": {
+      "title": "Session",
+      "description": "A session session-handling record representing active user logins",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "browser": { "type": "string" },
+        "os": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "lastActive": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "ipPlaceholder": { "type": "string" }
+      },
+      "required": ["id", "userId", "browser", "os", "createdAt", "lastActive", "isActive"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "A real-time notification alert for a citizen user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "relatedId": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "title", "message", "type", "read"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Registered citizen profile documents"
+    },
+    "issues/{issueId}": {
+      "schema": "Issue",
+      "description": "Civic issue documents containing descriptions, locations, status and images"
+    },
+    "sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "Authenticated user session documents tracking devices, active status and heartbeat logs"
+    },
+    "notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Real-time user notification documents"
+    }
+  }
+}
