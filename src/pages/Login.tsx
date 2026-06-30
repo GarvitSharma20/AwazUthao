@@ -6,6 +6,7 @@ import { loginWithEmail, registerWithEmail } from "../firebase/authService";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../firebase/config";
 import { signOut } from "firebase/auth";
+import { Eye, EyeOff } from "lucide-react";
 
 const DEPARTMENTS = [
   { id: "PWD", label: "PWD", emoji: "🛣️", desc: "Roads & Potholes" },
@@ -32,6 +33,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeRole, setActiveRole] = useState<"citizen" | "thekedar" | "officer">("citizen");
@@ -605,29 +608,38 @@ export default function Login() {
                 <p className="text-[11px] text-red-500 mt-1 font-semibold pl-1">⚠️ Please enter a valid email address</p>
               )}
             </div>
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors disabled:opacity-50"
+                className="w-full pl-4 pr-11 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors disabled:opacity-50"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                id="toggle-password-visibility"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
 
             {/* Dynamic Registration Extra Fields */}
             {isRegistering && (
               <>
                 {/* Confirm Password Input */}
-                <div>
+                <div className="relative">
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Re-enter password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     disabled={loading}
-                    className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none transition-colors disabled:opacity-50 ${
+                    className={`w-full pl-4 pr-11 py-3 rounded-xl border text-sm focus:outline-none transition-colors disabled:opacity-50 ${
                       confirmPassword.length === 0 
                         ? 'border-slate-200 focus:border-emerald-600' 
                         : passwordsMatch 
@@ -635,10 +647,19 @@ export default function Login() {
                         : 'border-red-400 focus:border-red-500'
                     }`}
                   />
-                  {confirmPassword.length > 0 && !passwordsMatch && (
-                    <p className="text-[11px] text-red-500 mt-1 font-semibold pl-1">⚠️ Passwords do not match</p>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    disabled={loading}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                    id="toggle-confirm-password-visibility"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
                 </div>
+                {confirmPassword.length > 0 && !passwordsMatch && (
+                  <p className="text-[11px] text-red-500 mt-1 font-semibold pl-1">⚠️ Passwords do not match</p>
+                )}
 
                 {/* Real-time Validation Tracker UI */}
                 <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl space-y-1.5 text-xs text-slate-500">

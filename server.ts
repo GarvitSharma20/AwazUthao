@@ -38,7 +38,7 @@ async function retryWithBackoff<T>(fn: () => Promise<T>, retries = 3, delay = 10
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
   // Use raw & json parsers with high limit for base64 images
   app.use(express.json({ limit: "50mb" }));

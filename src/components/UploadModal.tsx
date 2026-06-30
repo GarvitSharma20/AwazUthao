@@ -3,6 +3,7 @@ import { db, auth } from "../firebaseConfig";
 import { collection, addDoc, serverTimestamp, doc, updateDoc, increment } from "firebase/firestore";
 import { toast } from "react-hot-toast";
 import { fetchReverseGeocode } from "../utils/locationHelper";
+import { compressAndResizeImage } from "../utils/imageHelper";
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -28,19 +29,6 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
     }
   };
 
-  // Safe base64 converter utility function
-  const convertFileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64String = (reader.result as string).split(",")[1];
-        resolve(base64String);
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !description || !imageFile) {
@@ -53,7 +41,7 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
     // 1. Geolocation capture
     let latitude = 20.5937; 
-    let longitude = 78.9629;
+    let longitude = 78.9629; 
     try {
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -71,7 +59,7 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
       // 2. Direct Gemini processing using server-side endpoint (Saves API network hops and secures key)
       setStatusMessage("🤖 Step 2/3: Prompting Gemini Flash Vision API...");
       
-      const base64Data = await convertFileToBase64(imageFile);
+      const base64Data = await compressAndResizeImage(imageFile);
       
       const response = await fetch("/api/analyze-image", {
         method: "POST",

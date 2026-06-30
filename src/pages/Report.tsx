@@ -21,6 +21,7 @@ import { db, auth } from "../firebase/config";
 import { collection, addDoc, serverTimestamp, doc, updateDoc, increment } from "firebase/firestore";
 import { useAuth } from "../hooks/useAuth";
 import { fetchReverseGeocode } from "../utils/locationHelper";
+import { compressAndResizeImage } from "../utils/imageHelper";
 
 const COMMON_SUGGESTIONS = [
   { label: "Pothole 🕳️", title: "Severe Road Pothole", desc: "Large pothole in the middle of the road causing safety hazards." },
@@ -160,7 +161,7 @@ export default function Report() {
     setAiFilled(false);
     
     try {
-      const base64Data = await convertFileToBase64(file);
+      const base64Data = await compressAndResizeImage(file);
       const response = await fetch("/api/analyze-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -208,18 +209,6 @@ export default function Report() {
     toast.success(`Selected Preset: ${suggestion.label}`, { duration: 1500 });
   };
 
-  const convertFileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64String = (reader.result as string).split(",")[1];
-        resolve(base64String);
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim() || !imageFile) {
@@ -232,7 +221,7 @@ export default function Report() {
 
     try {
       // Convert media image into secure payload
-      const base64Data = await convertFileToBase64(imageFile);
+      const base64Data = await compressAndResizeImage(imageFile);
       
       let inferredCategory = aiCategory;
       let inferredSeverity = aiSeverity;
