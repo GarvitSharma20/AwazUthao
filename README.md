@@ -11,3 +11,64 @@ AwazUthao (Aapki Awaaz, Aapka Shehar) is a fully functional, mobile-first PWA fo
 6. Click "Publish" in Google AI Studio → get your public URL
 7. Add that URL to Firebase authorized domains
 8. Open URL on Android Chrome → tap menu → "Add to Home Screen"
+
+Complete App Flow
+
+Overview
+
+CITIZEN                    AUTHORITY OFFICER              THEKEDAR
+    │                            │                            │
+    │  Reports issue             │                            │
+    │  with photo                │                            │
+    │         │                  │                            │
+    │    GEMINI AI               │                            │
+    │    analyzes photo          │                            │
+    │    auto-fills all          │                            │
+    │    details                 │                            │
+    │         │                  │                            │
+    │  Gets Grievance ID         │                            │
+    │  + SLA deadline            │                            │
+    │         │                  │                            │
+    │         └──────────────────►                            │
+    │                     Issue appears in                    │
+    │                     officer's city                      │
+    │                     + dept queue                        │
+    │                            │                            │
+    │                     Officer reviews                     │
+    │                     AI analysis +                       │
+    │                     selects dept                        │
+    │                            │                            │
+    │                     Sees thekedar list                  │
+    │                     (same dept + city)                  │
+    │                            │                            │
+    │                     Assigns thekedar                    │
+    │                     + creates work order                │
+    │                            │                            │
+    │                            └────────────────────────────►
+    │                                                  Issue assigned
+    │                                                  to thekedar
+    │                                                         │
+    │                                                  Thekedar goes
+    │                                                  to location
+    │                                                         │
+    │                                                  Uploads proof
+    │                                                  photos + note
+    │                                                         │
+    │                                                  Submits work
+    │                            │◄────────────────────────────
+    │                     Officer reviews                     │
+    │                     before/after photos                 │
+    │                            │                            │
+    │                     Approves OR                         │
+    │                     Rejects with reason                 │
+    │                            │                            │
+    │◄───────────────────────────┘                            │
+    │  Gets notification                                      │
+    │  Sees official response                                 │
+    │  + resolution photos                                    │
+    │  Rates 1-5 stars                                        │
+    │                                                         │
+PUBLIC DASHBOARD (no login)
+    └── Department grades visible to everyone
+    └── Media, politicians, citizens see performance
+    └── Social + political pressure for accountability
